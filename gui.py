@@ -1,9 +1,8 @@
-#from __future__ import annotations
 import tkinter
 from tkinter.ttk import Frame, Label, Button
 import sqlite3
 import markdown as md
-from md2pdf.core import md2pdf
+from md2pdf.core import md2pdf # type: ignore
 from datetime import datetime
 
 class gui(tkinter.Tk):
@@ -22,6 +21,6 @@ class gui(tkinter.Tk):
     def print_Markdown(self) -> None:
         
         md2pdf(pdf_file_path=f"./pdf/{datetime.today().date()}_DdM_mkdwn.pdf",
-               md_content="# <center>bijoure</center>",
+               md_content=md.MD_Generate(self.md_list),
                css_file_path="./md_DdM.css",
                base_url="./img")

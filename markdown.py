@@ -4,7 +4,9 @@ uses a simple inheritance system from a PyObject to a MDObject
 
 class MD_Object:
 
-    def __init__(self, content:str = "") -> None:
+    def __init__(self,
+                 content:str = ""
+                ) -> None:
         """MD_Object class
         Is the default object who can provide a wide range of capabilites
 
@@ -18,7 +20,10 @@ class MD_Object:
     
     
 class MD_header(MD_Object):
-    def __init__(self, content: str = "", header_level:int = 1) -> None:
+    def __init__(self,
+                 content: str = "",
+                 header_level:int = 1
+                ) -> None:
         super().__init__(content)
         
         if not header_level and header_level <6:
@@ -31,7 +36,10 @@ class MD_header(MD_Object):
     
     
 class MD_codeblock(MD_Object):
-    def __init__(self, content: str = "", code_highlight:str = "py") -> None:
+    def __init__(self,
+                 content: str = "",
+                 code_highlight:str = "py"
+                ) -> None:
         super().__init__(content)
         
         self.highlighting = code_highlight
@@ -46,7 +54,10 @@ class MD_codeblock(MD_Object):
 
 
 class MD_hyperlink(MD_Object):
-    def __init__(self, content: str = "", link:str = "") -> None:
+    def __init__(self,
+                 content: str = "",
+                 link:str = ""
+                ) -> None:
         super().__init__(content)
         self.hyperlink = link
         
@@ -55,7 +66,10 @@ class MD_hyperlink(MD_Object):
 
 
 class MD_image(MD_hyperlink):
-    def __init__(self, content: str = "", link: str = "") -> None:
+    def __init__(self,
+                 content: str = "",
+                 link: str = ""
+                ) -> None:
         super().__init__(content, link)
     
     def __str__(self) -> str:
@@ -63,14 +77,18 @@ class MD_image(MD_hyperlink):
 
 
 class MD_separator(MD_Object):
-    def __init__(self, content: str = "") -> None:
+    def __init__(self,
+                 content: str = ""
+                ) -> None:
         super().__init__(content)
         
     def __str__(self) -> str:
         return "---"
     
 class MD_text(MD_Object):
-    def __init__(self, content: str = "") -> None:
+    def __init__(self,
+                 content: str = ""
+                ) -> None:
         super().__init__(content)
         
     def __str__(self) -> str:
@@ -78,7 +96,9 @@ class MD_text(MD_Object):
     
     
 class MD_italic(MD_text):
-    def __init__(self, content: str = "") -> None:
+    def __init__(self,
+                 content: str = ""
+                ) -> None:
         super().__init__(content)
         
     def __str__(self) -> str:
@@ -86,7 +106,9 @@ class MD_italic(MD_text):
     
 
 class MD_bold(MD_text):
-    def __init__(self, content: str = "") -> None:
+    def __init__(self,
+                 content: str = ""
+                ) -> None:
         super().__init__(content)
         
     def __str__(self) -> str:
@@ -94,7 +116,9 @@ class MD_bold(MD_text):
 
 
 class MD_codeline(MD_text):
-    def __init__(self, content: str = "") -> None:
+    def __init__(self, 
+                 content: str = ""
+                ) -> None:
         super().__init__(content)
         
     def __str__(self) -> str:
@@ -106,7 +130,11 @@ CENTER:str = ":-:"
 RIGHT:str = "-:"
 
 class MD_table_column(MD_Object):
-    def __init__(self,*, content: str = "", values:list[MD_Object], direction:str = NEUTRAL) -> None:
+    def __init__(self,*,
+                 content: str = "",
+                 values:list[MD_Object],
+                 direction:str = NEUTRAL
+                ) -> None:
         super().__init__(content)
         
         self.__values = values
@@ -128,7 +156,10 @@ class MD_table_column(MD_Object):
         
     
 class MD_table(MD_Object):
-    def __init__(self,*, content: str = "",column_list:list[MD_table_column]) -> None:
+    def __init__(self,*,
+                 content: str = "",
+                 column_list:list[MD_table_column]
+                ) -> None:
         super().__init__(content)
         self.column_list = column_list
         
