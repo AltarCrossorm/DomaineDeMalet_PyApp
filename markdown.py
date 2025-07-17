@@ -167,9 +167,9 @@ class MD_table(MD_Object):
     def __str__(self) -> str:
         return \
         f"""
-        |{'|'.join(str(self.column_list[i]) for i in range(len(self.column_list)))}|
-        |{'|'.join(str(self.column_list[i].get_direction()) for i in range(len(self.column_list)))}|
-        {'\n'.join(f"|{'|'.join(self.column_list[i].get_value(j).__str__() for i in range(len(self.column_list)))}|" for j in range(self.column_list[0].__len__()))}
+|{'|'.join(str(self.column_list[i]) for i in range(len(self.column_list)))}|
+|{'|'.join(str(self.column_list[i].get_direction()) for i in range(len(self.column_list)))}|
+{'\n'.join(f"|{'|'.join(self.column_list[i].get_value(j).__str__() for i in range(len(self.column_list)))}|" for j in range(self.column_list[0].__len__()))}
         """
         
 
