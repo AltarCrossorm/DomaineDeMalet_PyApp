@@ -1,0 +1,27 @@
+#from __future__ import annotations
+import tkinter
+from tkinter.ttk import Frame, Label, Button
+import sqlite3
+import markdown as md
+from md2pdf.core import md2pdf
+from datetime import datetime
+
+class gui(tkinter.Tk):
+    def __init__(self, screenName: str | None = None, baseName: str | None = None, className: str = "Tk", useTk: bool = True, sync: bool = False, use: str | None = None) -> None:
+        super().__init__(screenName, baseName, className, useTk, sync, use)
+    
+        self.con = sqlite3.connect("./database.db",autocommit=True)
+        self.cur = self.con.cursor()
+        self.md_list = [md.MD_Object()]
+        self.mainframe:Frame = Frame(self,padding=10)
+        self.mainframe.grid()
+        Label(self.mainframe,text="Application du Domaine de Malet").grid(column=0,row=0)
+        Button(self.mainframe,text="générer markdown",command=self.print_Markdown).grid(column=1,row=0)
+        self.maxsize(1000,1000)
+        
+    def print_Markdown(self) -> None:
+        
+        md2pdf(pdf_file_path=f"./pdf/{datetime.today().date()}_DdM_mkdwn.pdf",
+               md_content="# <center>bijoure</center>",
+               css_file_path="./md_DdM.css",
+               base_url="./img")
