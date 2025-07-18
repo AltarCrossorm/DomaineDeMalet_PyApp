@@ -1,22 +1,45 @@
-import tkinter
+import tkinter as tk
 from tkinter.ttk import Frame, Label, Button
 import sqlite3
 import markdown as md
 from md2pdf.core import md2pdf # type: ignore
 from datetime import datetime
+import webbrowser
 
-class gui(tkinter.Tk):
+class gui(tk.Tk):
     def __init__(self, screenName: str | None = None, baseName: str | None = None, className: str = "Tk", useTk: bool = True, sync: bool = False, use: str | None = None) -> None:
         super().__init__(screenName, baseName, className, useTk, sync, use)
     
         self.con = sqlite3.connect("./database.db",autocommit=True)
         self.cur = self.con.cursor()
         self.md_list:list[md.MD_Object] = []
+        
         self.mainframe:Frame = Frame(self,padding=10)
+        self.geometry("800x500")
         self.mainframe.grid()
-        Label(self.mainframe,text="Application du Domaine de Malet").grid(column=0,row=0)
+        self.menubar = tk.Menu(self)
+        self.menubar.add_command(label="Acceuil", command=self.menu_main)
+        self.menubar.add_command(label="Cuisine", command=self.menu_cuisine)
+        self.menubar.add_command(label="Courses", command=self.menu_courses)
+        self.menubar.add_command(label="Code source et aides", command=self.menu_aide)
+        
+        self.config(menu=self.menubar)
+
         Button(self.mainframe,text="générer markdown",command=self.print_Markdown).grid(column=0,row=1)
         self.maxsize(1000,1000)
+        
+    def menu_main(self) -> None:
+        Label(self.mainframe,text="Application du Domaine de Malet").grid(column=0,row=0)
+    
+     
+    def menu_cuisine(self) -> None:
+        pass
+    
+    def menu_courses(self) -> None:
+        pass
+    
+    def menu_aide(self) -> None:
+        webbrowser.open_new("https://github.com/AltarCrossorm/DomaineDeMalet_PyApp")
         
     def print_Markdown(self) -> None:
         print(self.md_list)
