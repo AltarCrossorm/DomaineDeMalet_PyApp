@@ -25,14 +25,20 @@ class gui(tk.Tk):
         
         self.config(menu=self.menubar)
 
-        Button(self.mainframe,text="générer markdown",command=self.print_Markdown).grid(column=0,row=1)
-        self.maxsize(1000,1000)
+        self.menu_main() # must end by this
+        
+    def clear_frame(self) -> None:
+        for children in self.mainframe.winfo_children():
+            children.destroy()
         
     def menu_main(self) -> None:
-        Label(self.mainframe,text="Application du Domaine de Malet").grid(column=0,row=0)
+        Label(self.mainframe,text="Application du Domaine de Malet").grid(column=0, row=0)
+        self.mainframe.grid()
     
      
     def menu_cuisine(self) -> None:
+        self.clear_frame()
+        Button(self.mainframe, text="Générer Markdown",command=self.print_Markdown).grid(column=0, row=0)
         pass
     
     def menu_courses(self) -> None:
