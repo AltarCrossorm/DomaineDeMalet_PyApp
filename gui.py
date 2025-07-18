@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter.ttk import Frame, Label, Button
+from tkinter.ttk import Frame, Label, Button, Combobox
 import sqlite3
 import markdown as md
 from md2pdf.core import md2pdf # type: ignore
@@ -32,17 +32,32 @@ class gui(tk.Tk):
             children.destroy()
         
     def menu_main(self) -> None:
+        self.clear_frame()
         Label(self.mainframe,text="Application du Domaine de Malet").grid(column=0, row=0)
         self.mainframe.grid()
     
      
     def menu_cuisine(self) -> None:
         self.clear_frame()
-        Button(self.mainframe, text="Générer Markdown",command=self.print_Markdown).grid(column=0, row=0)
-        pass
+        self.cuisine = []
+        Combobox(
+            self.mainframe, 
+            values=self.cur.execute(
+                f"SELECT DISTINCT type_plat FROM plats"
+                ).fetchall()[0]).grid(
+                    column=0, row=0
+                    )
+        Button(
+            self.mainframe, 
+            text="Générer Markdown",
+            command=self.print_Markdown
+            ).grid(
+                column=0, 
+                row=1
+                )
     
     def menu_courses(self) -> None:
-        pass
+        self.clear_frame()
     
     def menu_aide(self) -> None:
         webbrowser.open_new("https://github.com/AltarCrossorm/DomaineDeMalet_PyApp")
