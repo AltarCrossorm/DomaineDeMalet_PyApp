@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter.ttk import Frame, Label, Button, Combobox
 import sqlite3
-import markdown as md
+import tools.markdown as md
 from md2pdf.core import md2pdf # type: ignore
 from datetime import datetime
 import webbrowser
@@ -39,14 +39,17 @@ class gui(tk.Tk):
      
     def menu_cuisine(self) -> None:
         self.clear_frame()
-        self.cuisine = []
+        self.cuisine:list[tuple[tk.Widget, int, int]] = []
+        #self.cuisine.append()
         Combobox(
             self.mainframe, 
             values=self.cur.execute(
                 f"SELECT DISTINCT type_plat FROM plats"
-                ).fetchall()[0]).grid(
-                    column=0, row=0
-                    )
+                ).fetchall()[0]
+            ).grid(
+                column=0, row=0
+                )
+
         Button(
             self.mainframe, 
             text="Générer Markdown",
@@ -67,7 +70,7 @@ class gui(tk.Tk):
         if len(self.md_list) == 0:
             self.md_list.append(md.MD_header("<center>blank page</center>",6))
             
-        md2pdf(pdf_file_path=f"./pdf/{datetime.today().date()}_DdM_mkdwn.pdf",
+        md2pdf(pdf_file_path=f"./pdf/{datetime.today()}_DdM_mkdwn.pdf",
                md_content=md.MD_Generate(self.md_list),
                css_file_path="./md_DdM.css",
                base_url="./img")
