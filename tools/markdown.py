@@ -2,6 +2,9 @@
 uses a simple inheritance system from a PyObject to a MDObject
 """
 
+from md2pdf.core import md2pdf # type: ignore
+from tools import dates as date
+
 class MD_Object:
 
     def __init__(self,
@@ -123,6 +126,15 @@ class MD_codeline(MD_text):
         
     def __str__(self) -> str:
         return f"``{super().__str__()}``"
+    
+class MD_fReturn(MD_text):
+    def __init__(self,
+                 content: str = ""
+                ) -> None:
+        super().__init__(content)
+        
+    def __str__(self) -> str:
+        return "<br>"
 
 NEUTRAL:str = "-"
 LEFT:str = ":-"
@@ -169,13 +181,34 @@ class MD_table(MD_Object):
         f"""
 |{'|'.join(str(self.column_list[i]) for i in range(len(self.column_list)))}|
 |{'|'.join(str(self.column_list[i].get_direction()) for i in range(len(self.column_list)))}|
-{'\n'.join(f"|{'|'.join(self.column_list[i].get_value(j).__str__() for i in range(len(self.column_list)))}|" for j in range(self.column_list[0].__len__()))}
+{'\n'.join(f"|{'|'.join(self.column_list[i].get_value(j).__str__() for i in range(len(self.column_list)))}|" for j in range(len(self.column_list[0])))}
         """
         
-
+class MD_HTML(MD_Object):
+    def __init__(self, 
+                 content: str = "",
+                 tag:str = "div",
+                 style:list[tuple[str,...]] = []
+                ) -> None:
+        super().__init__(content)
+        self.tag = tag
+        self.style = style
+        
+    def __str__(self) -> str:
+        return f"<{self.tag}{f"style=\"{", ".join([f"{t[0]}={t[1]}" for t in self.style])}\"" if self.style else ""}>{self.content}</{self.tag}>"
 
 def MD_fuse(first:list[MD_Object], second:list[MD_Object]) -> list[MD_Object]:
-    return first + second
+
+    final:list[MD_Object] = []
+    
+    for md in first:
+        final.append(md)
+        
+    for md in second:
+        final.append(md)
+        
+    return final
+    
 
 def MD_Generate(final:list[MD_Object]) -> str:
     ret:str = ""
@@ -185,3 +218,14 @@ def MD_Generate(final:list[MD_Object]) -> str:
 
 def MD_fSpace() -> str:
     return "&nbsp;"
+
+def print_Markdown(list:list[MD_Object]) -> None:
+        if len(list) == 0:
+            list.append(MD_header("<center>blank page</center>",6))
+            
+        md2pdf(pdf_file_path=f"./pdf/{date.get_date_directory("./pdf")}/{date.get_file_hour()}_DdM_mkdwn.pdf",
+               md_content=MD_Generate(list),
+               css_file_path="./md_DdM.css",
+               base_url="./img")
+        
+        print("Document generated")
